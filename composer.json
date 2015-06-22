@@ -1,0 +1,31 @@
+{
+    "name": "roman444uk/yii2-magnific-popup",
+    "description": "JQuery magnific popup widget",
+    "version": "dev-master",
+    "keywords": [
+        "roman444uk",
+        "yii",
+        "yii2",
+        "yii 2",
+        "jquery",
+        "magnific popup"
+    ],
+    "type": "yii2-extension",
+    "homepage": "https://github.com/roman444uk/yii2-magnific-popup",
+    "authors": [
+        {
+            "name": "Roman Gnidenko",
+            "email": "roman444uk@mail.ru",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "roman444uk\\magnificPopup\\": ""
+        }
+    }
+}
