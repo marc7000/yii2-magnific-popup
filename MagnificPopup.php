@@ -63,13 +63,14 @@ class MagnificPopup extends \yii\base\Widget
      */
     public function run() {
         $effectList = ['fade', 'with-zoom', 'zoom-in', 'newspaper',
-            'move-horizontal', 'move-from-top', '3d-unfold', 'zoom-out'];
+            'move-horizontal', 'move-from-top', '3d-unfold', 'zoom-out'
+        ];
         
         if ($this->effect && in_array($this->effect, $effectList)) {
             $this->defaultOptions['mainClass'] = 'mfp-' . $this->effect;
             $this->defaultOptions['removalDelay'] = 500;
             $this->defaultOptions['callbacks'] = array(
-                'beforeOpen' => new JsExpression("function(){this.st.image.markup = this.st.image.markup.replace('mfp-figure', 'mfp-figure mfp-with-anim');}")
+                'beforeOpen' => new JsExpression("function() {this.st.image.markup = this.st.image.markup.replace('mfp-figure', 'mfp-figure mfp-with-anim');}")
             );
             if ($this->effect == 'with-zoom') {
                 $this->defaultOptions = array_merge($this->defaultOptions, array(
@@ -79,54 +80,18 @@ class MagnificPopup extends \yii\base\Widget
                 ));
             }
         }
+        
         if ($this->type !== null) {
             $this->options['type'] = $this->type;
         }
+        
+        $view = $this->getView();
+        $asset = $this->asset;
+        
         $options = array_merge($this->defaultOptions, $this->options);
-        $optionsJs = Json::encode($options);
-        $js = "jQuery('{$this->target}').magnificPopup($optionsJs);";
+        $js = "jQuery('{$this->target}').magnificPopup(" . Json::encode($options) . ");";
         
-        $this->publishAssets();
-        $this->getView()->registerJs($js);
-    }
-    
-    /**
-     * Function to publish and register assets on page 
-     * @throws Exception
-     */
-    public function publishAssets() {
-        $assets = dirname(__FILE__) . '/assets';
-        //$baseUrl = Yii::$app->assetManager->publish($assets);
-        
-        $assetClass = $this->asset;
-        $assetClass::register($this->getView());
-        /*if (is_dir($assets)) {
-            Yii::$app->clientScript->registerroman444uk\coreScript('jquery');
-            Yii::$app->clientScript->registerScriptFile(
-                $baseUrl . '/jquery.magnific-popup' . (!YII_DEBUG ? '.min' : '') . '.js',
-                CClientScript::POS_HEAD
-            );
-            
-            if ($this->language == null) {
-                $this->language = strtolower(Yii::app()->language);
-            }
-            
-            if ($this->language) {
-                $avaliableLanguages = array('pt-br');
-                if (in_array($this->language, $avaliableLanguages)) {
-                    Yii::app()->clientScript->registerScriptFile($baseUrl . '/locales/jquery.magnific-popup.' . $this->language . '.js', CClientScript::POS_HEAD);
-                } elseif (in_array(substr($this->language, 0, 2), $avaliableLanguages)) {
-                    Yii::app()->clientScript->registerScriptFile($baseUrl . '/locales/jquery.magnific-popup.' . substr($this->language, 0, 2) . '.js', CClientScript::POS_HEAD);
-                }
-            }
-            
-            Yii::$app->clientScript->registerCssFile($baseUrl . '/magnific-popup.css');
-            
-            if ($this->effect && (isset($this->defaultOptions['mainClass']) && $this->defaultOptions['mainClass'])) {
-                Yii::app()->clientScript->registerCssFile($baseUrl . '/magnific-popup.effects.css');
-            }
-        } else {
-            throw new Exception('EBaseMagnificPopup - Error: Couldn\'t find assets to publish.');
-        }*/
+        $asset::register($view);
+        $view->registerJs($js);
     }
 }
