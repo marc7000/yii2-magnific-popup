@@ -156,7 +156,6 @@ MagnificPopup.prototype = {
 	 * @param  data [description]
 	 */
 	open: function(data) {
-
 		var i;
 
 		if(data.isObj === false) { 
@@ -183,6 +182,11 @@ MagnificPopup.prototype = {
 
 		// if popup is already opened - we just update the content
 		if(mfp.isOpen) {
+                        // prepend popup wrapper anew if prependTo is different
+                        if (mfp.prependedTo !== data.prependTo) {
+                            mfp.wrap.prependTo( data.prependTo || $(document.body) )
+                            mfp.prependedTo = data.prependTo;
+                        }
 			mfp.updateItemHTML();
 			return;
 		}
@@ -356,6 +360,7 @@ MagnificPopup.prototype = {
 		
 		// add everything to DOM
 		mfp.bgOverlay.add(mfp.wrap).prependTo( mfp.st.prependTo || $(document.body) );
+                mfp.prependedTo = mfp.st.prependTo;
 
 		// Save last focused element
 		mfp._lastFocusedEl = document.activeElement;
@@ -664,7 +669,7 @@ MagnificPopup.prototype = {
 			e.preventDefault();
 
 			// This will prevent popup from closing if element is inside and popup is already opened
-			if(mfp.isOpen) {
+			if(mfp.isOpen && mfp.prependedTo === options.prependTo) {
 				e.stopPropagation();
 			}
 		}
