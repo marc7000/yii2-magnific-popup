@@ -89,7 +89,11 @@ class MagnificPopup extends \yii\base\Widget
         $asset = $this->asset;
         
         $options = array_merge($this->defaultOptions, $this->options);
-        $js = "jQuery('{$this->target}').magnificPopup(" . Json::encode($options) . ");";
+        $js = "
+        $(document).on('ready pjax:success', function(event, data, status, xhr, options) {
+            jQuery('{$this->target}').magnificPopup(" . Json::encode($options) . ");
+        });
+        ";
         
         $asset::register($view);
         $view->registerJs($js);
